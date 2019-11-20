@@ -1,13 +1,8 @@
 import tensorflow as tf
-from .tf_base_net import conv, max_pool, fc
+from net.tf_base_net import conv, max_pool, fc
 
 
-def create_simple_cnn_model(input_size=784, n_classes=10):
-    # create placeholder
-    x_input = tf.placeholder(tf.float32, shape=[None, input_size])
-    y_input = tf.placeholder(tf.float32, shape=[None, n_classes])
-    # if test set dropout to false
-    bool_dropout = tf.placeholder(tf.bool)
+def create_simple_cnn_model(x_input, y_input, bool_dropout, n_classes=10):
 
     # reshape mnist dataset into images with (28,28) px
     x_input_reshaped = tf.reshape(x_input, \
@@ -33,11 +28,11 @@ def create_simple_cnn_model(input_size=784, n_classes=10):
     # In Math, a Logit is a function that maps probabilities ([0, 1]) to R ((-inf, inf))
     logits_1 = fc(dropout_1, n_classes)
 
-    return logits_1
+    return logits_1, y_input
 
 
 def calculate_loss(logits, y_input):
-    with tf.name.scope('loss'):
+    with tf.name_scope('loss'):
         softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(
             labels=y_input, logits=logits
         )
@@ -48,13 +43,21 @@ def calculate_loss(logits, y_input):
 
 
 def optimize_weights(loss_operation):
-    with tf.name.scope('optimizer'):
+    with tf.name_scope('optimizer'):
         optimizer = tf.train.AdamOptimizer().minimize(loss_operation)
 
         return optimizer
 
 
 def calculate_accuracy(logits, y_input):
-    with tf.name.scope('correct_prediction'):
-        predictions = tf.argmax(logits, 1)
-        correct_preditions = tf.equal(predictions, tf.argmax(y_input, 1))
+    with tf.name_scope('accuracy'):
+        with tf.name_scope('correct_prediction'):
+            predictions = tf.argmax(logits, 1)
+            correct_preditions = tf.equal(predictions, tf.argmax(y_input, 1))
+        with tf.name_scope('accuracy'):
+            accuracy_operation = tf.reduce_mean(
+                tf.cast(correct_preditions, tf.float32)
+            )
+    tf.summary.scalar('accuracy', accuracy_operation)
+
+    return accuracy_operation

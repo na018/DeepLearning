@@ -1,7 +1,8 @@
-import tensorflow as tf 
-from .utils import add_variable_summary
+import tensorflow as tf
+from net.utils import add_variable_summary
 
-def conv(input_layer, filters, kernel_size=[3,3], activation=tf.nn.relu):
+
+def conv(input_layer, filters, kernel_size=[3, 3], activation=tf.nn.relu):
     """Convolutional layer with included tensorboard summary.
 
     Arguments:
@@ -23,7 +24,7 @@ def conv(input_layer, filters, kernel_size=[3,3], activation=tf.nn.relu):
     return layer
 
 
-def max_pool(input_layer, pool_size=[2,2], strides=2):
+def max_pool(input_layer, pool_size=[2, 2], strides=2):
     """Max pooling with included tensorboard summary.
 
     Arguments:
@@ -67,7 +68,3 @@ def fc(input_layer, units, activation=tf.nn.relu):
     add_variable_summary(layer, 'dense')
 
     return layer
-
-
-
-
