@@ -3,7 +3,20 @@ from net.tf_base_net import conv, max_pool, fc
 
 
 def create_simple_cnn_model(x_input, y_input, bool_dropout, n_classes=10):
+    """
+        create network architecture
 
+        Arguments:
+            x_input {tensor} -- input image shape[-1,28,28]
+            y_input {tensor} -- labels according to input images
+            bool_dropout {boolean} -- for training
+
+        Keyword Arguments:
+            n_classes {int} -- amount of different labels (default: {10})
+
+        Returns:
+            [tensor] -- logits mapping input image to class probabilies
+    """
     # reshape mnist dataset into images with (28,28) px
     x_input_reshaped = tf.reshape(x_input, \
                                   # -1: batch size can be any number, 1 channel
@@ -26,9 +39,9 @@ def create_simple_cnn_model(x_input, y_input, bool_dropout, n_classes=10):
     )
 
     # In Math, a Logit is a function that maps probabilities ([0, 1]) to R ((-inf, inf))
-    logits_1 = fc(dropout_1, n_classes)
+    logits_1 = fc(dropout_1, n_classes, activation=tf.nn.softmax)
 
-    return logits_1, y_input
+    return logits_1
 
 
 def calculate_loss(logits, y_input):
