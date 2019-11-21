@@ -49,7 +49,7 @@ def train_keras(batch_size, epochs, n_classes):
     print('Test data accuracy:', test_accuracy)
 
 
-def train_tensorflow(bacht_size, epochs, n_classes):
+def train_tensorflow(batch_size, epochs, n_classes):
     mnist_data = input_data.read_data_sets('MNIST_data', one_hot=True)
     test_images, test_labels = mnist_data.test.images, mnist_data.test.labels
     input_size = 784
