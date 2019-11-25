@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.idea
+data/test1
+data/train
+.downloaded_data/
+01_Cat_vs_Dog/.download_data
